@@ -21,7 +21,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define FD_API_VERSION 3
+#define FD_API_VERSION 4
 
 /* The core is compiled as C and exports unmangled names. A mod (or the
  * open-fdv binding) that includes this header from C++ must see the same
@@ -143,6 +143,7 @@ typedef struct {
         int32_t gear;
         float clutch;
         int32_t engine_failed;
+        int32_t drivetrain_open; /* 1 after a grind until the clutch is pressed */
         int32_t events;
         FdCarTuning tuning;
 } FdCar;
