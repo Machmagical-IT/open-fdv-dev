@@ -21,7 +21,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define FD_API_VERSION 1
+#define FD_API_VERSION 2
 
 /* The core is compiled as C and exports unmangled names. A mod (or the
  * open-fdv binding) that includes this header from C++ must see the same
@@ -127,12 +127,15 @@ typedef struct {
         float mass;
         float drag;
         float steer_rate;
+        float grip;             /* lateral velocity decay, 1/s */
+        float handbrake_grip;   /* same, while the handbrake is held */
 } FdCarTuning;
 
 typedef struct {
         float x, z;
         float heading;
-        float speed;
+        float speed;            /* m/s along heading */
+        float lateral_speed;    /* m/s sideways, positive left: the drift */
         float rpm;
         int32_t gear;
         float clutch;
@@ -146,6 +149,7 @@ typedef struct {
         float steer;
         float clutch;
         int32_t requested_gear;
+        int32_t handbrake;      /* 0/1: less grip, more yaw, scrubs speed */
 } FdCarInput;
 
 /* ------------------------------------------------------------------ */

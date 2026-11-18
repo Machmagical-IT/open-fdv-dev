@@ -1,6 +1,9 @@
 # ABI 契约（syscall 表）
 
-版本：1（`FD_API_VERSION`）
+版本：2（`FD_API_VERSION`）
+
+v2 变更：`FdCar` 增加 `lateral_speed`，`FdCarInput` 增加 `handbrake`，
+`FdCarTuning` 增加 `grip` / `handbrake_grip`。这些是结构体布局变更，旧模组必须重编。
 
 每个模组必须先调用 `fd_core_version()` 并核对 `FD_API_VERSION`，不匹配要立即失败。
 
@@ -29,6 +32,9 @@
 | `fd_car_step` | `FdStatus fd_car_step(FdCar *c, const FdCarInput *input, float dt)` | dt 必须是 `FD_VEH_FIXED_DT`；故障边沿触发在 `c->events` |
 | `fd_car_restart` | `FdStatus fd_car_restart(FdCar *c)` | 清除引擎故障：原地重启，保留位置与朝向，挡位归空挡、速度归零 |
 | `fd_car_collide` | `int32_t fd_car_collide(FdCar *c, float nx, float nz, int32_t kind, float *out_impact)` | kind: 0 墙 / 1 道具 / 2 对手 |
+
+`FdCarInput.handbrake`（0/1）降低横向抓地、提高偏航并消耗前进速度；
+`FdCar.lateral_speed` 是车头方向与速度方向的差，也就是漂移量。
 
 ## 故障事件（FdCar.events 位域）
 
