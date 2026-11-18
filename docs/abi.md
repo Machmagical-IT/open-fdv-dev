@@ -1,9 +1,10 @@
 # ABI 契约（syscall 表）
 
-版本：2（`FD_API_VERSION`）
+版本：3（`FD_API_VERSION`）
 
-v2 变更：`FdCar` 增加 `lateral_speed`，`FdCarInput` 增加 `handbrake`，
-`FdCarTuning` 增加 `grip` / `handbrake_grip`。这些是结构体布局变更，旧模组必须重编。
+v3 变更：`FdCar` 增加 `steer_angle`（轮角状态），`FdCarTuning` 增加
+`max_steer_angle` / `steer_speed`。v2 已增加 `lateral_speed`、`handbrake`、
+`grip` / `handbrake_grip`。这些是结构体布局变更，旧模组必须重编。
 
 每个模组必须先调用 `fd_core_version()` 并核对 `FD_API_VERSION`，不匹配要立即失败。
 

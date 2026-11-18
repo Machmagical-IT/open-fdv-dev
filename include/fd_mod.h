@@ -30,7 +30,7 @@
 
 #include <fd_api.h>
 
-#define FD_MOD_API_VERSION 2
+#define FD_MOD_API_VERSION 3
 
 /* Log levels passed to FdModHost::log. */
 #define FD_MOD_LOG_INFO 0
