@@ -27,6 +27,7 @@
 | `fd_car_default_tuning` | `void fd_car_default_tuning(FdCarTuning *out)` | 填默认调校 |
 | `fd_car_apply_tuning` | `FdStatus fd_car_apply_tuning(FdCar *c, const FdCarTuning *tuning)` | 热刷新：只改配置，保留运行时状态 |
 | `fd_car_step` | `FdStatus fd_car_step(FdCar *c, const FdCarInput *input, float dt)` | dt 必须是 `FD_VEH_FIXED_DT`；故障边沿触发在 `c->events` |
+| `fd_car_restart` | `FdStatus fd_car_restart(FdCar *c)` | 清除引擎故障：原地重启，保留位置与朝向，挡位归空挡、速度归零 |
 | `fd_car_collide` | `int32_t fd_car_collide(FdCar *c, float nx, float nz, int32_t kind, float *out_impact)` | kind: 0 墙 / 1 道具 / 2 对手 |
 
 ## 故障事件（FdCar.events 位域）

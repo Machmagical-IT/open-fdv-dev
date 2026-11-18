@@ -23,6 +23,14 @@
 
 #define FD_API_VERSION 1
 
+/* The core is compiled as C and exports unmangled names. A mod (or the
+ * open-fdv binding) that includes this header from C++ must see the same
+ * linkage, or every call compiles to a mangled undefined symbol and the
+ * library fails to load at runtime. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* ------------------------------------------------------------------ */
 /* Common                                                              */
 /* ------------------------------------------------------------------ */
@@ -158,7 +166,15 @@ int32_t fd_vehicle_collide(FdVehicle *v, float normal_x, float normal_z,
 void fd_car_default_tuning(FdCarTuning *out);
 FdStatus fd_car_apply_tuning(FdCar *c, const FdCarTuning *tuning);
 FdStatus fd_car_step(FdCar *c, const FdCarInput *input, float dt);
+/* Clear a failed engine and restart in place: keeps position and heading,
+ * drops the gear to neutral and the speed to zero. The fault is sticky, so
+ * this is the only way back. */
+FdStatus fd_car_restart(FdCar *c);
 int32_t fd_car_collide(FdCar *c, float normal_x, float normal_z,
                        int32_t kind, float *out_impact_speed);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* FD_API_H */
