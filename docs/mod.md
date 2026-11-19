@@ -1,6 +1,6 @@
 # 写一个载具模组（mod）
 
-版本：1（`FD_MOD_API_VERSION`）
+版本：5（`FD_MOD_API_VERSION`）
 
 模组是一个原生动态库（Linux `.so` / Windows `.dll` / macOS `.dylib`），由宿主
 open-fdv 在启动时扫描并加载。模组只负责**声明数据**：它要提供哪些载具、每种载具用

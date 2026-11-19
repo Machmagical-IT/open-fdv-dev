@@ -1,10 +1,12 @@
 # ABI 契约（syscall 表）
 
-版本：3（`FD_API_VERSION`）
+版本：5（`FD_API_VERSION`）
 
-v3 变更：`FdCar` 增加 `steer_angle`（轮角状态），`FdCarTuning` 增加
-`max_steer_angle` / `steer_speed`。v2 已增加 `lateral_speed`、`handbrake`、
-`grip` / `handbrake_grip`。这些是结构体布局变更，旧模组必须重编。
+v5 变更：`fd_box_throw_dir` 新增投掷者的水平速度 `carrier_vx` / `carrier_vz`
+（开车时是车速，步行时是胶囊速度），签名变化，旧模组必须重编。v4 增加
+`FdCar.drivetrain_open`；v3 增加 `steer_angle`（轮角状态）与
+`max_steer_angle` / `steer_speed`；v2 已增加 `lateral_speed`、`handbrake`、
+`grip` / `handbrake_grip`。这些是结构体布局或函数签名变更，旧模组必须重编。
 
 每个模组必须先调用 `fd_core_version()` 并核对 `FD_API_VERSION`，不匹配要立即失败。
 
@@ -36,6 +38,15 @@ v3 变更：`FdCar` 增加 `steer_angle`（轮角状态），`FdCarTuning` 增�
 
 `FdCarInput.handbrake`（0/1）降低横向抓地、提高偏航并消耗前进速度；
 `FdCar.lateral_speed` 是车头方向与速度方向的差，也就是漂移量。
+
+## 配送箱
+
+| 符号 | 签名 | 说明 |
+|---|---|---|
+| `fd_box_throw_dir` | `int32_t fd_box_throw_dir(float fx, float fy, float fz, float tx, float ty, float tz, float carrier_vx, float carrier_vz, uint32_t seed, float gravity, FdVec3 *out)` | 初速度 = 方向解 + 投掷者水平速度，水平分量夹在 `FD_BOX_THROW_MAX_SPEED`（基础 14 m/s 的 1.6 倍）；垂直分量不缩放。`carrier_v* = 0` 与 v4 弧线逐位一致 |
+
+`seed` 让摆动在两端一致，`carrier_vx` / `carrier_vz` 让箱子继承投掷者的动量：
+向前投更远、反向投更近，120 km/h 的车也不会把箱子当炮弹打出去。
 
 ## 故障事件（FdCar.events 位域）
 

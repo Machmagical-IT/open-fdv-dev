@@ -21,7 +21,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define FD_API_VERSION 4
+#define FD_API_VERSION 5
 
 /* The core is compiled as C and exports unmangled names. A mod (or the
  * open-fdv binding) that includes this header from C++ must see the same
@@ -180,6 +180,20 @@ FdStatus fd_car_step(FdCar *c, const FdCarInput *input, float dt);
 FdStatus fd_car_restart(FdCar *c);
 int32_t fd_car_collide(FdCar *c, float normal_x, float normal_z,
                        int32_t kind, float *out_impact_speed);
+
+/* Delivery box. The trajectory lives in the core so a host and every client
+ * replay the same arc from the same event. `carrier_vx`/`carrier_vz` are the
+ * thrower's horizontal velocity (vehicle while riding, capsule on foot); the
+ * initial velocity is the direction solve plus that momentum, clamped so a
+ * fast car cannot throw like a cannon. Pass 0, 0 for a standing throw, which
+ * reproduces the v4 arc exactly. */
+#define FD_BOX_THROW_MAX_SPEED 22.4f
+
+int32_t fd_box_throw_dir(float from_x, float from_y, float from_z,
+                         float to_x, float to_y, float to_z,
+                         float carrier_vx, float carrier_vz,
+                         uint32_t seed, float gravity,
+                         FdVec3 *out_velocity);
 
 #ifdef __cplusplus
 } /* extern "C" */
